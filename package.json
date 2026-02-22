@@ -1,0 +1,26 @@
+{
+  "name": "tgcli",
+  "version": "1.0.0",
+  "description": "",
+  "main": "dist/cli.js",
+  "bin": {
+    "tgcli": "./dist/cli.js"
+  },
+  "scripts": {
+    "build": "tsc",
+    "dev": "tsc --watch"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "module",
+  "dependencies": {
+    "commander": "^14.0.3",
+    "input": "^1.0.1",
+    "telegram": "^2.26.22"
+  },
+  "devDependencies": {
+    "@types/node": "^25.3.0",
+    "typescript": "^5.9.3"
+  }
+}
