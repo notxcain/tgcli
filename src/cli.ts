@@ -10,7 +10,9 @@ const program = new Command();
 
 program
   .name("tgcli")
-  .description("Read-only Telegram CLI for agent consumption")
+  .description(
+    "Read-only Telegram CLI for agent consumption.\n\nWorkflow: search → get chat ID → info/read/download"
+  )
   .version("0.1.0");
 
 function handleError(err: unknown, plain: boolean): void {
