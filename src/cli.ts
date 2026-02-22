@@ -6,6 +6,7 @@ import { infoCommand } from "./commands/info.js";
 import { readCommand } from "./commands/read.js";
 import { downloadCommand } from "./commands/download.js";
 import { activeCommand } from "./commands/active.js";
+import { foldersCommand } from "./commands/folders.js";
 
 const program = new Command();
 
@@ -53,13 +54,34 @@ program
   });
 
 program
-  .command("search <query>")
-  .description("Search dialogs (DMs, groups, channels) by name")
+  .command("folders")
+  .description("List all chat folders")
+  .option("--plain", "Plain text output instead of JSON", false)
+  .action(async (opts) => {
+    try {
+      await foldersCommand({ plain: opts.plain });
+    } catch (err) {
+      handleError(err, opts.plain);
+    }
+  });
+
+program
+  .command("search [query]")
+  .description("Search dialogs by name, or list chats in a folder")
+  .option("--folder <id>", "Filter to chats in this folder (use 'tgcli folders' to list)")
   .option("--limit <n>", "Maximum results", "20")
   .option("--plain", "Plain text output instead of JSON", false)
   .action(async (query, opts) => {
+    if (!query && opts.folder == null) {
+      console.error("Provide a search query or --folder <id>");
+      process.exit(1);
+    }
     try {
-      await searchCommand(query, { limit: parseInt(opts.limit, 10), plain: opts.plain });
+      await searchCommand(query, {
+        limit: parseInt(opts.limit, 10),
+        plain: opts.plain,
+        folder: opts.folder != null ? parseInt(opts.folder, 10) : undefined,
+      });
     } catch (err) {
       handleError(err, opts.plain);
     }
