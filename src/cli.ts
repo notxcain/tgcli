@@ -5,6 +5,7 @@ import { searchCommand } from "./commands/search.js";
 import { infoCommand } from "./commands/info.js";
 import { readCommand } from "./commands/read.js";
 import { downloadCommand } from "./commands/download.js";
+import { activeCommand } from "./commands/active.js";
 
 const program = new Command();
 
@@ -34,6 +35,20 @@ program
     } catch (err) {
       console.error(err instanceof Error ? err.message : err);
       process.exit(1);
+    }
+  });
+
+program
+  .command("active")
+  .description("List chats with recent activity")
+  .option("--days <n>", "Number of days to look back", "5")
+  .option("--limit <n>", "Maximum results", "50")
+  .option("--plain", "Plain text output instead of JSON", false)
+  .action(async (opts) => {
+    try {
+      await activeCommand({ days: parseInt(opts.days, 10), limit: parseInt(opts.limit, 10), plain: opts.plain });
+    } catch (err) {
+      handleError(err, opts.plain);
     }
   });
 
