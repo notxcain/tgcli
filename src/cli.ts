@@ -3,6 +3,7 @@ import { Command } from "commander";
 import { authCommand } from "./commands/auth.js";
 import { searchCommand } from "./commands/search.js";
 import { infoCommand } from "./commands/info.js";
+import { readCommand } from "./commands/read.js";
 
 const program = new Command();
 
@@ -53,6 +54,26 @@ program
   .action(async (chatId, opts) => {
     try {
       await infoCommand(chatId, { plain: opts.plain });
+    } catch (err) {
+      handleError(err, opts.plain);
+    }
+  });
+
+program
+  .command("read <chat-id>")
+  .description("Read messages from a chat")
+  .option("--limit <n>", "Maximum messages to return", "50")
+  .option("--before <date>", "Messages before this ISO date (e.g. 2026-02-20)")
+  .option("--after <date>", "Messages after this ISO date")
+  .option("--plain", "Plain text output instead of JSON", false)
+  .action(async (chatId, opts) => {
+    try {
+      await readCommand(chatId, {
+        limit: parseInt(opts.limit, 10),
+        before: opts.before,
+        after: opts.after,
+        plain: opts.plain,
+      });
     } catch (err) {
       handleError(err, opts.plain);
     }
