@@ -1,6 +1,7 @@
 import { TelegramClient } from "telegram";
 import { StringSession } from "telegram/sessions/index.js";
-import prompt from "input";
+import input from "input";
+const prompt = input.text;
 import { saveConfig, saveSession, ensureConfigDir } from "../client.js";
 
 export async function authCommand(): Promise<void> {
@@ -34,7 +35,7 @@ export async function authCommand(): Promise<void> {
       },
       password: async (hint) => {
         const hintMsg = hint ? ` (hint: ${hint})` : "";
-        return await prompt(`  2FA Password${hintMsg}: `);
+        return await input.password(`  2FA Password${hintMsg}: `);
       },
       onError: (err) => {
         console.error("Auth error:", err.message);
