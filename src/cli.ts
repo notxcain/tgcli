@@ -2,6 +2,7 @@
 import { Command } from "commander";
 import { authCommand } from "./commands/auth.js";
 import { searchCommand } from "./commands/search.js";
+import { infoCommand } from "./commands/info.js";
 
 const program = new Command();
 
@@ -40,6 +41,18 @@ program
   .action(async (query, opts) => {
     try {
       await searchCommand(query, { limit: parseInt(opts.limit, 10), plain: opts.plain });
+    } catch (err) {
+      handleError(err, opts.plain);
+    }
+  });
+
+program
+  .command("info <chat-id>")
+  .description("Get chat metadata (name, type, member count)")
+  .option("--plain", "Plain text output instead of JSON", false)
+  .action(async (chatId, opts) => {
+    try {
+      await infoCommand(chatId, { plain: opts.plain });
     } catch (err) {
       handleError(err, opts.plain);
     }
