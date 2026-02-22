@@ -4,6 +4,7 @@ import { authCommand } from "./commands/auth.js";
 import { searchCommand } from "./commands/search.js";
 import { infoCommand } from "./commands/info.js";
 import { readCommand } from "./commands/read.js";
+import { downloadCommand } from "./commands/download.js";
 
 const program = new Command();
 
@@ -74,6 +75,19 @@ program
         after: opts.after,
         plain: opts.plain,
       });
+    } catch (err) {
+      handleError(err, opts.plain);
+    }
+  });
+
+program
+  .command("download <chat-id> <message-id>")
+  .description("Download media from a specific message")
+  .option("--out-dir <path>", "Output directory", ".")
+  .option("--plain", "Plain text output instead of JSON", false)
+  .action(async (chatId, msgId, opts) => {
+    try {
+      await downloadCommand(chatId, msgId, { outDir: opts.outDir, plain: opts.plain });
     } catch (err) {
       handleError(err, opts.plain);
     }
