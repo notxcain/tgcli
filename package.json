@@ -1,6 +1,6 @@
 {
-  "name": "tgcli",
-  "version": "1.0.0",
+  "name": "@notxcain/tgcli",
+  "version": "0.1.0",
   "description": "Read-only Telegram CLI for agent consumption",
   "main": "dist/cli.js",
   "bin": {
