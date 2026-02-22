@@ -1,5 +1,5 @@
 import { Api } from "telegram";
-import { join } from "node:path";
+import { join, resolve } from "node:path";
 import { stat } from "node:fs/promises";
 import { createClient } from "../client.js";
 import { DownloadResult } from "../types.js";
@@ -48,7 +48,7 @@ export async function downloadCommand(
       filename = `${msgId}.jpg`;
     }
 
-    const outPath = join(opts.outDir, filename);
+    const outPath = resolve(join(opts.outDir, filename));
 
     const result = await client.downloadMedia(message, {
       outputFile: outPath,

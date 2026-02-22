@@ -34,7 +34,7 @@ export async function loadConfig(): Promise<TgConfig> {
 
 export async function saveSession(session: string): Promise<void> {
   await ensureConfigDir();
-  await writeFile(SESSION_PATH, session);
+  await writeFile(SESSION_PATH, session, { mode: 0o600 });
 }
 
 export async function loadSession(): Promise<string> {

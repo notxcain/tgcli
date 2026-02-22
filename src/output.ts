@@ -35,7 +35,8 @@ function formatMediaTag(media: MediaInfo): string {
   if (media.width && media.height) parts.push(`${media.width}x${media.height}`);
   if (media.size) parts.push(formatBytes(media.size));
   if (media.duration) parts.push(`${media.duration}s`);
-  return `[${parts.join(": ")}]`;
+  const [type, ...rest] = parts;
+  return rest.length > 0 ? `[${type}: ${rest.join(", ")}]` : `[${type}]`;
 }
 
 function formatBytes(bytes: number): string {

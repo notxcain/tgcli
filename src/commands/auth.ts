@@ -25,24 +25,27 @@ export async function authCommand(): Promise<void> {
     { connectionRetries: 5 }
   );
 
-  await client.start({
-    phoneNumber: async () => await prompt("\nPhone number (with country code): "),
-    phoneCode: async () => {
-      console.log("Code sent to your Telegram app.");
-      return await prompt("  Code: ");
-    },
-    password: async (hint) => {
-      const hintMsg = hint ? ` (hint: ${hint})` : "";
-      return await prompt(`  2FA Password${hintMsg}: `);
-    },
-    onError: (err) => {
-      console.error("Auth error:", err.message);
-    },
-  });
+  try {
+    await client.start({
+      phoneNumber: async () => await prompt("\nPhone number (with country code): "),
+      phoneCode: async () => {
+        console.log("Code sent to your Telegram app.");
+        return await prompt("  Code: ");
+      },
+      password: async (hint) => {
+        const hintMsg = hint ? ` (hint: ${hint})` : "";
+        return await prompt(`  2FA Password${hintMsg}: `);
+      },
+      onError: (err) => {
+        console.error("Auth error:", err.message);
+      },
+    });
 
-  const sessionStr = client.session.save() as unknown as string;
-  await saveSession(sessionStr);
-  await client.disconnect();
+    const sessionStr = client.session.save() as unknown as string;
+    await saveSession(sessionStr);
+  } finally {
+    await client.disconnect();
+  }
 
   console.log("\n✓ Authenticated. Session saved to ~/.tgcli/session");
 }

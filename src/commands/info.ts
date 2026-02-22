@@ -1,4 +1,4 @@
-import { Api } from "telegram";
+import { Api, TelegramClient } from "telegram";
 import { createClient } from "../client.js";
 import { ChatInfo, ChatType } from "../types.js";
 import { formatOutput } from "../output.js";
@@ -14,7 +14,7 @@ function getEntityType(entity: Entity): ChatType {
   return "channel";
 }
 
-async function getMemberCount(client: any, entity: Entity): Promise<number> {
+async function getMemberCount(client: TelegramClient, entity: Entity): Promise<number> {
   try {
     if (entity instanceof Api.User) return 2;
     if (entity instanceof Api.Chat) return entity.participantsCount ?? 0;

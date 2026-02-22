@@ -45,7 +45,7 @@ function extractMedia(message: Api.Message): MediaInfo | null {
           info.filename = attr.fileName;
         }
         if (attr instanceof Api.DocumentAttributeVideo) {
-          info.type = attr.roundMessage ? "voice" : "video";
+          info.type = "video";
           info.width = attr.w;
           info.height = attr.h;
           info.duration = attr.duration;
@@ -102,11 +102,19 @@ export async function readCommand(
     const entity = await client.getEntity(chatId);
 
     const offsetDate = opts.before
-      ? Math.floor(new Date(opts.before).getTime() / 1000)
+      ? (() => {
+          const d = new Date(opts.before!);
+          if (isNaN(d.getTime())) throw new Error(`Invalid date: ${opts.before}. Use ISO format (e.g. 2026-02-20)`);
+          return Math.floor(d.getTime() / 1000);
+        })()
       : undefined;
 
     const afterTs = opts.after
-      ? Math.floor(new Date(opts.after).getTime() / 1000)
+      ? (() => {
+          const d = new Date(opts.after!);
+          if (isNaN(d.getTime())) throw new Error(`Invalid date: ${opts.after}. Use ISO format (e.g. 2026-02-20)`);
+          return Math.floor(d.getTime() / 1000);
+        })()
       : undefined;
 
     const messages: MessageResult[] = [];
