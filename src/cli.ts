@@ -1,12 +1,4 @@
-#!/usr/bin/env node
-
-// Suppress GramJS "localstorage-file" warning
-const origEmitWarning = process.emitWarning;
-process.emitWarning = ((warning: string | Error, ...args: any[]) => {
-  if (typeof warning === "string" && warning.includes("--localstorage-file")) return;
-  return (origEmitWarning as any).call(process, warning, ...args);
-}) as typeof process.emitWarning;
-
+#!/usr/bin/env -S node --no-warnings
 import { Command } from "commander";
 import { authCommand } from "./commands/auth.js";
 import { searchCommand } from "./commands/search.js";
