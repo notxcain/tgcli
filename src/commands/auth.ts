@@ -1,18 +1,24 @@
 import { TelegramClient } from "telegram";
 import { StringSession } from "telegram/sessions/index.js";
-import input from "input";
-const prompt = input.text;
+import { createInterface } from "node:readline/promises";
 import { saveConfig, saveSession, ensureConfigDir } from "../client.js";
+
+function createRl() {
+  return createInterface({ input: process.stdin, output: process.stdout });
+}
 
 export async function authCommand(): Promise<void> {
   await ensureConfigDir();
 
+  const rl = createRl();
+
   console.log("Telegram API credentials (from https://my.telegram.org/auth):\n");
-  const apiIdStr = await prompt("  API ID: ");
-  const apiHash = await prompt("  API Hash: ");
+  const apiIdStr = await rl.question("  API ID: ");
+  const apiHash = await rl.question("  API Hash: ");
 
   const apiId = parseInt(apiIdStr, 10);
   if (isNaN(apiId)) {
+    rl.close();
     console.error("Error: API ID must be a number.");
     process.exit(1);
   }
@@ -28,14 +34,19 @@ export async function authCommand(): Promise<void> {
 
   try {
     await client.start({
-      phoneNumber: async () => await prompt("\nPhone number (with country code): "),
+      phoneNumber: async () => {
+        const phone = await rl.question("\nPhone number (with country code): ");
+        return phone;
+      },
       phoneCode: async () => {
         console.log("Code sent to your Telegram app.");
-        return await prompt("  Code: ");
+        const code = await rl.question("  Code: ");
+        return code;
       },
       password: async (hint) => {
         const hintMsg = hint ? ` (hint: ${hint})` : "";
-        return await input.password(`  2FA Password${hintMsg}: `);
+        const pass = await rl.question(`  2FA Password${hintMsg}: `);
+        return pass;
       },
       onError: (err) => {
         console.error("Auth error:", err.message);
@@ -45,6 +56,7 @@ export async function authCommand(): Promise<void> {
     const sessionStr = client.session.save() as unknown as string;
     await saveSession(sessionStr);
   } finally {
+    rl.close();
     await client.disconnect();
   }
 
