@@ -1,7 +1,7 @@
 import { Api } from "telegram";
 import { createClient } from "../client.js";
 import { MessageResult, MediaInfo } from "../types.js";
-import { formatOutput } from "../output.js";
+import { formatOutput, OutputFormat } from "../output.js";
 
 function extractMedia(message: Api.Message): MediaInfo | null {
   if (!message.media) return null;
@@ -89,7 +89,7 @@ interface ReadOpts {
   limit: number;
   before?: string;
   after?: string;
-  plain: boolean;
+  format: OutputFormat;
 }
 
 export async function readCommand(
@@ -136,7 +136,7 @@ export async function readCommand(
       });
     }
 
-    console.log(formatOutput(messages, opts.plain));
+    console.log(formatOutput(messages, opts.format));
   } finally {
     await client.disconnect();
   }

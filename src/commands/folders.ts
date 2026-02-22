@@ -1,6 +1,6 @@
 import { Api } from "telegram";
 import { createClient } from "../client.js";
-import { formatOutput } from "../output.js";
+import { formatOutput, OutputFormat } from "../output.js";
 
 interface FolderResult {
   id: number;
@@ -8,7 +8,7 @@ interface FolderResult {
   emoticon?: string;
 }
 
-export async function foldersCommand(opts: { plain: boolean }): Promise<void> {
+export async function foldersCommand(opts: { format: OutputFormat }): Promise<void> {
   const client = await createClient();
 
   try {
@@ -29,7 +29,7 @@ export async function foldersCommand(opts: { plain: boolean }): Promise<void> {
       }
     }
 
-    console.log(formatOutput(folders, opts.plain));
+    console.log(formatOutput(folders, opts.format));
   } finally {
     await client.disconnect();
   }

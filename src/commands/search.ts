@@ -2,7 +2,7 @@ import { Api } from "telegram";
 import { TelegramClient } from "telegram";
 import { createClient } from "../client.js";
 import { ChatSearchResult, ChatType } from "../types.js";
-import { formatOutput } from "../output.js";
+import { formatOutput, OutputFormat } from "../output.js";
 
 function getChatType(dialog: { isUser: boolean; isGroup: boolean; isChannel: boolean }): ChatType {
   if (dialog.isUser) return "dm";
@@ -83,7 +83,7 @@ async function buildFolderMatcher(
 
 interface SearchOpts {
   limit: number;
-  plain: boolean;
+  format: OutputFormat;
   folder?: number;
 }
 
@@ -112,7 +112,7 @@ export async function searchCommand(query: string | undefined, opts: SearchOpts)
       });
     }
 
-    console.log(formatOutput(results, opts.plain));
+    console.log(formatOutput(results, opts.format));
   } finally {
     await client.disconnect();
   }

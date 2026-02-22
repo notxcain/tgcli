@@ -3,12 +3,12 @@ import { join, resolve } from "node:path";
 import { stat } from "node:fs/promises";
 import { createClient } from "../client.js";
 import { DownloadResult } from "../types.js";
-import { formatOutput } from "../output.js";
+import { formatOutput, OutputFormat } from "../output.js";
 
 export async function downloadCommand(
   chatId: string,
   msgId: string,
-  opts: { outDir: string; plain: boolean }
+  opts: { outDir: string; format: OutputFormat }
 ): Promise<void> {
   const client = await createClient();
 
@@ -66,7 +66,7 @@ export async function downloadCommand(
       mimeType,
     };
 
-    console.log(formatOutput(output, opts.plain));
+    console.log(formatOutput(output, opts.format));
   } finally {
     await client.disconnect();
   }

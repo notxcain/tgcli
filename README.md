@@ -1,6 +1,6 @@
 # tgcli
 
-Read-only Telegram CLI for agent consumption. Authenticates as your personal Telegram account via MTProto and provides structured JSON output for programmatic use.
+Read-only Telegram CLI for agent consumption. Authenticates as your personal Telegram account via MTProto and provides structured output optimized for LLM token efficiency.
 
 ## Install
 
@@ -19,9 +19,18 @@ tgcli auth
 
 Session is saved to `~/.tgcli/session` (mode 0600). Config saved to `~/.tgcli/config.json`.
 
-## Commands
+## Output formats
 
-All commands output JSON by default. Add `--plain` for human-readable text.
+All commands output [TOON](https://github.com/nicholasgasior/toon) (Token-Oriented Object Notation) by default — a compact format that reduces token usage by 30-60% vs JSON for arrays of objects. Use global flags to switch format:
+
+| Flag | Format |
+|------|--------|
+| _(default)_ | TOON |
+| `--json` | JSON (pretty-printed) |
+| `--plain` | Human-readable plain text |
+| `--format <fmt>` | Explicit: `toon`, `json`, or `plain` |
+
+## Commands
 
 ### auth
 
@@ -37,13 +46,7 @@ List all chat folders.
 
 ```bash
 tgcli folders
-```
-
-```json
-[
-  { "id": 248, "title": "Personal" },
-  { "id": 58, "title": "Spain" }
-]
+tgcli folders --json
 ```
 
 ### search
@@ -56,7 +59,7 @@ tgcli search --folder 248
 tgcli search "Mom" --folder 248
 ```
 
-Options: `--folder <id>`, `--limit <n>` (default: 20), `--plain`
+Options: `--folder <id>`, `--limit <n>` (default: 20)
 
 ### active
 
@@ -67,7 +70,7 @@ tgcli active
 tgcli active --days 3
 ```
 
-Options: `--days <n>` (default: 5), `--limit <n>` (default: 50), `--plain`
+Options: `--days <n>` (default: 5), `--limit <n>` (default: 50)
 
 ### info
 
@@ -75,18 +78,8 @@ Get chat metadata.
 
 ```bash
 tgcli info "123456789"
+tgcli info "123456789" --json
 ```
-
-```json
-{
-  "id": "123456789",
-  "name": "Tech Channel",
-  "type": "channel",
-  "memberCount": 166
-}
-```
-
-Options: `--plain`
 
 ### read
 
@@ -98,7 +91,7 @@ tgcli read "123456789" --after 2026-02-20
 tgcli read "123456789" --before 2026-02-22 --after 2026-02-20
 ```
 
-Options: `--limit <n>` (default: 50), `--before <date>`, `--after <date>`, `--plain`
+Options: `--limit <n>` (default: 50), `--before <date>`, `--after <date>`
 
 ### download
 
@@ -109,7 +102,7 @@ tgcli download "123456789" 4522
 tgcli download "123456789" 4522 --out-dir /tmp
 ```
 
-Options: `--out-dir <path>` (default: `.`), `--plain`
+Options: `--out-dir <path>` (default: `.`)
 
 ## Workflow
 

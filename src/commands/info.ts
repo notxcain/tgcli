@@ -1,7 +1,7 @@
 import { Api, TelegramClient } from "telegram";
 import { createClient } from "../client.js";
 import { ChatInfo, ChatType } from "../types.js";
-import { formatOutput } from "../output.js";
+import { formatOutput, OutputFormat } from "../output.js";
 
 type Entity = Api.User | Api.Chat | Api.Channel;
 
@@ -42,7 +42,7 @@ function getEntityName(entity: Entity): string {
   return "Unknown";
 }
 
-export async function infoCommand(chatId: string, opts: { plain: boolean }): Promise<void> {
+export async function infoCommand(chatId: string, opts: { format: OutputFormat }): Promise<void> {
   const client = await createClient();
 
   try {
@@ -56,7 +56,7 @@ export async function infoCommand(chatId: string, opts: { plain: boolean }): Pro
       memberCount,
     };
 
-    console.log(formatOutput(info, opts.plain));
+    console.log(formatOutput(info, opts.format));
   } finally {
     await client.disconnect();
   }

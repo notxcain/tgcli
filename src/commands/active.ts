@@ -1,6 +1,6 @@
 import { createClient } from "../client.js";
 import { ChatSearchResult, ChatType } from "../types.js";
-import { formatOutput } from "../output.js";
+import { formatOutput, OutputFormat } from "../output.js";
 
 function getChatType(dialog: { isUser: boolean; isGroup: boolean; isChannel: boolean }): ChatType {
   if (dialog.isUser) return "dm";
@@ -8,7 +8,7 @@ function getChatType(dialog: { isUser: boolean; isGroup: boolean; isChannel: boo
   return "channel";
 }
 
-export async function activeCommand(opts: { days: number; limit: number; plain: boolean }): Promise<void> {
+export async function activeCommand(opts: { days: number; limit: number; format: OutputFormat }): Promise<void> {
   const client = await createClient();
 
   try {
@@ -27,7 +27,7 @@ export async function activeCommand(opts: { days: number; limit: number; plain: 
       });
     }
 
-    console.log(formatOutput(results, opts.plain));
+    console.log(formatOutput(results, opts.format));
   } finally {
     await client.disconnect();
   }

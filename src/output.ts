@@ -1,9 +1,16 @@
+import { encode } from "@toon-format/toon";
 import { ChatSearchResult, ChatInfo, MessageResult, DownloadResult, MediaInfo } from "./types.js";
 
-export function formatOutput(data: unknown, plain: boolean): string {
-  if (!plain) {
+export type OutputFormat = "toon" | "json" | "plain";
+
+export function formatOutput(data: unknown, format: OutputFormat): string {
+  if (format === "json") {
     return JSON.stringify(data, null, 2);
   }
+  if (format === "toon") {
+    return encode(data as any);
+  }
+  // plain
   if (Array.isArray(data) && data.length > 0 && "text" in data[0]) {
     return formatMessagesPlain(data as MessageResult[]);
   }
