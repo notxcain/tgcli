@@ -5,7 +5,7 @@ Read-only Telegram CLI for agent consumption. Authenticates as your personal Tel
 ## Install
 
 ```bash
-npm install -g github:notxcain/tgcli
+npm install -g tgcli
 ```
 
 ## Setup
