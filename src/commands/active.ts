@@ -16,7 +16,7 @@ export async function activeCommand(opts: { days: number; limit: number; plain: 
     const results: ChatSearchResult[] = [];
 
     for await (const dialog of client.iterDialogs({})) {
-      if (dialog.date < cutoff) break;
+      if (dialog.date < cutoff) continue;
       if (results.length >= opts.limit) break;
 
       results.push({

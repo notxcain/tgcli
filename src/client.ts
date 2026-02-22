@@ -1,6 +1,6 @@
 import { TelegramClient } from "telegram";
 import { StringSession } from "telegram/sessions/index.js";
-import { Logger } from "telegram/extensions/index.js";
+import { LogLevel } from "telegram/extensions/Logger.js";
 import { readFile, writeFile, mkdir } from "node:fs/promises";
 import { existsSync } from "node:fs";
 import { homedir } from "node:os";
@@ -46,7 +46,6 @@ export async function loadSession(): Promise<string> {
 }
 
 export async function createClient(): Promise<TelegramClient> {
-  Logger.setLevel("none");
   const config = await loadConfig();
   const sessionStr = await loadSession();
   const client = new TelegramClient(
@@ -55,6 +54,7 @@ export async function createClient(): Promise<TelegramClient> {
     config.apiHash,
     { connectionRetries: 5 }
   );
+  client.setLogLevel(LogLevel.NONE);
   await client.connect();
   return client;
 }
