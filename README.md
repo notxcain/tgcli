@@ -113,6 +113,28 @@ tgcli read "-100123"   # read messages
 tgcli download "-100123" 42  # download media
 ```
 
+## Claude Code Skill
+
+tgcli includes a Claude Code plugin with a command reference skill. When installed, Claude automatically knows how to use tgcli when you ask about Telegram messages, chats, or contacts.
+
+### Install via Plugin Marketplace
+
+Register the marketplace:
+
+```bash
+/plugin marketplace add notxcain/tgcli
+```
+
+Install the plugin:
+
+```bash
+/plugin install tgcli@tgcli
+```
+
+### Verify
+
+Start a new Claude Code session and ask something like "read my recent Telegram messages". Claude should automatically invoke the tgcli skill.
+
 ## Security
 
 - Session file has full account access (same as Telegram Desktop)

@@ -11,14 +11,17 @@ Read-only CLI that authenticates as the user's personal Telegram account via MTP
 **Session:** `~/.tgcli/session` (mode 0600)
 **Config:** `~/.tgcli/config.json`
 
-## Global flags
+## Output format
+
+**Always use the default TOON format.** TOON is 30-60% smaller than JSON and you can parse it just fine. Never add `--json` unless:
+- Piping output to `jq`
+- The user explicitly asks for JSON output
 
 | Flag | Format |
 |------|--------|
-| _(default)_ | TOON (token-efficient, 30-60% smaller than JSON) |
-| `--json` | JSON (pretty-printed) |
+| _(default)_ | TOON — always use this |
+| `--json` | JSON — only when piping to `jq` or user requests it |
 | `--plain` | Human-readable plain text |
-| `--format <fmt>` | Explicit: `toon`, `json`, or `plain` |
 
 ## Commands
 
@@ -36,7 +39,6 @@ List all chat folders. Returns array of `{ id, name }`.
 
 ```bash
 tgcli folders
-tgcli folders --json
 ```
 
 ### search [query]
