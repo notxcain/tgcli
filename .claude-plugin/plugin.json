@@ -1,0 +1,7 @@
+{
+  "name": "tgcli",
+  "description": "Telegram CLI skill for reading personal chats via tgcli",
+  "version": "0.1.0",
+  "repository": "https://github.com/notxcain/tgcli",
+  "keywords": ["telegram", "cli", "agent"]
+}
