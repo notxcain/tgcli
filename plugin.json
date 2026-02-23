@@ -1,0 +1,6 @@
+{
+  "name": "tgcli",
+  "description": "Telegram CLI skill for reading personal chats via tgcli",
+  "version": "0.1.0",
+  "skills": "./skills/"
+}
