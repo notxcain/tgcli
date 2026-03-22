@@ -1,5 +1,5 @@
 import { Api, TelegramClient } from "telegram";
-import { createClient } from "../client.js";
+import { createClient, resolveEntity } from "../client.js";
 import { ChatInfo, ChatType } from "../types.js";
 import { formatOutput, OutputFormat } from "../output.js";
 
@@ -46,7 +46,7 @@ export async function infoCommand(chatId: string, opts: { format: OutputFormat }
   const client = await createClient();
 
   try {
-    const entity = await client.getEntity(chatId) as Entity;
+    const entity = await resolveEntity(client, chatId) as Entity;
     const memberCount = await getMemberCount(client, entity);
 
     const info: ChatInfo = {

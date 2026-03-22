@@ -1,5 +1,5 @@
 import { Api } from "telegram";
-import { createClient } from "../client.js";
+import { createClient, resolveEntity } from "../client.js";
 import { MessageResult, MediaInfo } from "../types.js";
 import { formatOutput, OutputFormat } from "../output.js";
 
@@ -99,7 +99,7 @@ export async function readCommand(
   const client = await createClient();
 
   try {
-    const entity = await client.getEntity(chatId);
+    const entity = await resolveEntity(client, chatId);
 
     const offsetDate = opts.before
       ? (() => {

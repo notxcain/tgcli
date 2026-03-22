@@ -1,4 +1,5 @@
 import { TelegramClient } from "telegram";
+import { Api } from "telegram";
 import { StringSession } from "telegram/sessions/index.js";
 import { Logger, LogLevel } from "telegram/extensions/Logger.js";
 import { readFile, writeFile, mkdir } from "node:fs/promises";
@@ -56,4 +57,34 @@ export async function createClient(): Promise<TelegramClient> {
   );
   await client.connect();
   return client;
+}
+
+/**
+ * Resolve a chat entity by ID with fallback to iterating dialogs.
+ *
+ * GramJS `getEntity()` requires the peer to already be cached in the
+ * StringSession. For DM chats that were never accessed through this
+ * client instance, the cache entry is missing and getEntity throws.
+ * This helper catches that error and falls back to scanning dialogs
+ * (which always fetches fresh data from the API).
+ */
+export async function resolveEntity(
+  client: TelegramClient,
+  chatId: string,
+): Promise<Api.User | Api.Chat | Api.Channel> {
+  try {
+    return await client.getEntity(chatId) as Api.User | Api.Chat | Api.Channel;
+  } catch {
+    // Entity not in session cache — fall back to iterating dialogs
+    const targetId = chatId.toString();
+    for await (const dialog of client.iterDialogs({})) {
+      if (dialog.id?.toString() === targetId) {
+        return dialog.entity as Api.User | Api.Chat | Api.Channel;
+      }
+    }
+    throw new Error(
+      `Could not find chat ${chatId} via getEntity or dialogs. ` +
+      `Make sure the chat exists and is accessible.`
+    );
+  }
 }
