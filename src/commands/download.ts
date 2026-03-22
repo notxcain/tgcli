@@ -1,7 +1,7 @@
 import { Api } from "telegram";
 import { join, resolve } from "node:path";
 import { stat } from "node:fs/promises";
-import { createClient } from "../client.js";
+import { createClient, resolveEntity } from "../client.js";
 import { DownloadResult } from "../types.js";
 import { formatOutput, OutputFormat } from "../output.js";
 
@@ -13,7 +13,7 @@ export async function downloadCommand(
   const client = await createClient();
 
   try {
-    const entity = await client.getEntity(chatId);
+    const entity = await resolveEntity(client, chatId);
     const messages = await client.getMessages(entity, { ids: [parseInt(msgId, 10)] });
 
     if (messages.length === 0 || !messages[0]) {
